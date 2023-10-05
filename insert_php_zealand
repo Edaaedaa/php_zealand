@@ -1,0 +1,86 @@
+<?php
+require("settings/init.php");
+
+if (!empty($_POST["data"])) {
+    $data = $_POST["data"];
+
+    $sql = "INSERT INTO produkter (prodName, prodDescription, prodPrice) VALUES(:prodName, :prodDescription, :prodPrice)";
+    $bind = [":prodName" => $data["prodName"], ":prodDescription" => $data["prodDescription"], ":prodPrice" => $data["prodPrice"]];
+
+    $db->sql($sql, binds: $bind, false);
+
+    echo "The product is now inserted. <a href='index.php'> Insert a product more </a> ";
+    exit;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="utf-8">
+
+    <title>Sigende titel</title>
+
+    <meta name="robots" content="All">
+    <meta name="author" content="Udgiver">
+    <meta name="copyright" content="Information om copyright">
+
+    <link href="css/_bootstrapComponents.scss" rel="stylesheet" type="text/css">
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.tiny.cloud/1/33wjaemng0go9n8ybj88tgm2kuztqxitd04jps730afk6udo/tinymce/6/tinymce.min.js"
+            referrerpolicy="origin"></script>
+
+<body>
+
+<form method="post" action="insert.php">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label for="prodNavn">Product Name</label>
+                <input class="form-control" type="text" name="data[prodName]" id="prodName" placeholder="Product Name"
+                       value="">
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label for="prodPrice">Product Price</label>
+                <input class="form-control" type="number" step="0.1" name="data[prodPrice]" id="prodPrice"
+                       placeholder="Product Price" value="">
+            </div>
+
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="prodDescription">Product Description</label>
+                    <textarea class="form-control" name="data[prodDescription]" id="prodDescription"></textarea>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 offset-md-6">
+                <button class="form-control" btn-primary type="submit" id="btnSubmit">Create product</button>
+            </div>
+        </div>
+
+</form>
+
+<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed permanentpen footnotes advtemplate advtable advcode editimage tableofcontents mergetags powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+            {value: 'First.Name', title: 'First Name'},
+            {value: 'Email', title: 'Email'},
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+    });
+</script>
+
+</body>
+</html>
+
